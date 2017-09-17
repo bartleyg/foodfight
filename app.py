@@ -8,10 +8,10 @@ from wtforms.validators import DataRequired
 import pandas as pd
 
 # App config.
-DEBUG = True
+DEBUG = False
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
+app.config['SECRET_KEY'] = '7d661f27d881f27567d441f2b6176a'
 
 # Login to Google. Only need to run this once, the rest of requests will use the same session.
 pytrend = TrendReq()
