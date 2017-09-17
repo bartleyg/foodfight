@@ -42,7 +42,7 @@ def trends_chart():
             flash('Error: All the form fields are required. ')
  
     # get google trends data
-    pytrend.build_payload(kw_list=[food1, food2], timeframe='now 1-H', geo='US-TX-635')
+    pytrend.build_payload(kw_list=[food1, food2], timeframe='now 1-d', geo='US-TX-635')
     tacos_bbq_df = pytrend.interest_over_time()
 
     # add hover tool
