@@ -13,6 +13,9 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 
+# Login to Google. Only need to run this once, the rest of requests will use the same session.
+pytrend = TrendReq()
+
 class ReusableForm(Form):
     food1 = TextField('Food 1:', validators=[DataRequired()])
     food2 = TextField('Food 2:', validators=[DataRequired()])
@@ -67,7 +70,6 @@ def trends_chart():
 
 
 if __name__ == "__main__":
-    # Login to Google. Only need to run this once, the rest of requests will use the same session.
-    pytrend = TrendReq()
     # launch Flask webserver on default host port
     app.run()
+
