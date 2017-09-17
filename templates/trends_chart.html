@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <title>Food Fight!</title>
+        <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.9.min.css" rel="stylesheet">
+        <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.9.min.css" rel="stylesheet">
+       <link rel="stylesheet" media="screen" href ="static/css/bootstrap.min.css">
+       <link rel="stylesheet" href="static/css/bootstrap-theme.min.css">
+       <meta name="viewport" content = "width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+ 
+ 
+<div class="container">
+ 
+ 
+  <h2 align="center">Food Fight!</h2>
+  <form  action="" method="post" role="form">
+    {{ form.csrf }}
+    <div class="form-group">
+      <label for="food1">Food 1:</label>
+      <input type="text" class="form-control" id="food1" name="food1" placeholder="{{ food1 }}">
+      <br>
+      <label for="food2">Food 2:</label>
+      <input type="text" class="form-control" id="food2" name="food2" placeholder="{{ food2 }}">
+    </div>
+    <button type="submit" class="btn btn-success">Fight</button>
+  </form>
+ 
+  <br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+ 
+        {% for message in messages %}
+            {% if "Error" not in message[1]: %}
+                <div class="alert alert-info">
+                <strong>Success! </strong> {{ message[1] }}
+                </div>
+            {% endif %}
+ 
+            {% if "Error" in message[1]: %}
+                <div class="alert alert-warning">
+                {{ message[1] }}
+                </div>
+            {% endif %}
+        {% endfor %}
+            {% endif %}
+        {% endwith %}
+    <br>
+
+    <h3 align="center">{{ food1 }} VS {{ food2 }} Interest in Austin past Hour</h3>
+    {{ the_div|safe }}
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.9.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.9.min.js"></script>
+    {{ the_script|safe }}
+
+</div>
+<br>
+</div>
+</div>
+</body>
+</html>
