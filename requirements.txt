@@ -3,3 +3,4 @@ bokeh==0.12.9
 WTForms==2.1
 pandas==0.20.3
 pytrends==4.2.2
+gunicorn==19.7.1
