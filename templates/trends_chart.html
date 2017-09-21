@@ -1,30 +1,44 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-    <head>
-        <title>Food Fight!</title>
-        <link href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.9.min.css" rel="stylesheet">
-        <link href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.9.min.css" rel="stylesheet">
-       <link rel="stylesheet" media="screen" href ="static/css/bootstrap.min.css">
-       <link rel="stylesheet" href="static/css/bootstrap-theme.min.css">
-       <meta name="viewport" content = "width=device-width, initial-scale=1.0">
-    </head>
-    <body>
- 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    
+    <title>Food Fight!</title>
+
+    <!-- Chart.js and moment needed for time axis of Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+  </head>
+<body>
+
  
 <div class="container">
  
- 
-  <h2 align="center">Food Fight!</h2>
-  <form  action="" method="post" role="form">
+ <br>
+  <h1 class="text-center">Food Fight!</h2>
+  <br>
+  <form action="" method="post">
     {{ form.csrf }}
-    <div class="form-group">
-      <label for="food1">Food 1:</label>
-      <input type="text" class="form-control" id="food1" name="food1" placeholder="{{ food1 }}">
-      <br>
-      <label for="food2">Food 2:</label>
-      <input type="text" class="form-control" id="food2" name="food2" placeholder="{{ food2 }}">
+    <div class="row">
+      <div class="col">
+        <input type="text" class="form-control text-center" name="food1" placeholder="{{food1}}" value="{{food1}}">
+      </div>
+      <div class="col-1 text-center">
+        <h4>vs.</h4>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control text-center" name="food2" placeholder="{{food2}}" value="{{food2}}">
+      </div>
     </div>
-    <button type="submit" class="btn btn-success">Fight</button>
+    <br>
+    <div class="text-center">
+      <button type="submit" class="btn btn-success btn-lg">Fight</button>
+    </div>
   </form>
  
   <br>
@@ -33,7 +47,7 @@
  
         {% for message in messages %}
             {% if "Error" not in message[1]: %}
-                <div class="alert alert-info">
+                <div class="alert alert-info text-center">
                 <strong>Success! </strong> {{ message[1] }}
                 </div>
             {% endif %}
@@ -46,17 +60,158 @@
         {% endfor %}
             {% endif %}
         {% endwith %}
-    <br>
 
-    <h3 align="center">{{ food1 }} VS {{ food2 }} Interest in Austin past 24 Hours</h3>
-    {{ the_div|safe }}
-    <script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.9.min.js"></script>
-    <script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.9.min.js"></script>
-    {{ the_script|safe }}
-
+    <h3 align="center">Interest in Austin past 24 Hours</h3>
+<div>
+<!-- <div style="width:75%; margin: 0 auto;">-->
+    <!-- bar chart canvas element -->
+    <canvas id="chart"></canvas>
 </div>
 <br>
+    <h3 align="center">Interest in Austin past Week</h3>
+<div>
+<!-- <div style="width:75%; margin: 0 auto;">-->
+    <!-- bar chart canvas element -->
+    <canvas id="chart_7d"></canvas>
 </div>
-</div>
+<script>
+var ctx = document.getElementById('chart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: [{% for label in time_24h %}
+                    "{{label}}",
+                    {% endfor %}],
+        datasets: [{
+            label: "{{food1}}",
+            fill: false,
+            pointRadius: 0,
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [{% for value in food1_24h %}
+                        {{value}},
+                        {% endfor %}],
+        }, {
+            label: "{{food2}}",
+            fill: false,
+            pointRadius: 0,
+            backgroundColor: 'rgb(54, 162, 235)',
+            borderColor: 'rgb(54, 162, 235)',
+            data: [{% for value in food2_24h %}
+                        {{value}},
+                        {% endfor %}],
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+                responsive: true,
+                title:{
+                    display:true,
+                    text:'{{food1}} vs. {{food2}}'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Interest'
+                        }
+                    }]
+                }
+            }
+});
+</script>
+
+<script>
+var ctx = document.getElementById('chart_7d').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: [{% for label in time_7d %}
+                    "{{label}}",
+                    {% endfor %}],
+        datasets: [{
+            label: "{{food1}}",
+            fill: false,
+            pointRadius: 0,
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [{% for value in food1_7d %}
+                        {{value}},
+                        {% endfor %}],
+        }, {
+            label: "{{food2}}",
+            fill: false,
+            pointRadius: 0,
+            backgroundColor: 'rgb(54, 162, 235)',
+            borderColor: 'rgb(54, 162, 235)',
+            data: [{% for value in food2_7d %}
+                        {{value}},
+                        {% endfor %}],
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+                responsive: true,
+                title:{
+                    display:true,
+                    text:'{{food1}} vs. {{food2}}'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Interest'
+                        }
+                    }]
+                }
+            }
+});
+</script>
+<br>
+
+</div><!--end class="container"-->
+
 </body>
 </html>

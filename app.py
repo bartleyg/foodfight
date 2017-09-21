@@ -1,7 +1,4 @@
 from pytrends.request import TrendReq
-from bokeh.plotting import figure
-from bokeh.embed import components
-from bokeh.models import HoverTool
 from flask import Flask, render_template, flash, request
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 from wtforms.validators import DataRequired
@@ -39,34 +36,32 @@ def trends_chart():
             # Save the comment here.
             flash('Analyzing ' + food1 + ' vs ' + food2)
         else:
-            flash('Error: All the form fields are required. ')
+            flash('Error: All the form fields are required.')
  
-    # get google trends data
+    # get google trends data past 24 hours
     pytrend.build_payload(kw_list=[food1, food2], timeframe='now 1-d', geo='US-TX-635')
-    tacos_bbq_df = pytrend.interest_over_time()
+    food_24h_df = pytrend.interest_over_time()
 
-    # add hover tool
-    hovertool = HoverTool(tooltips='@y{0}')
+    # time - y axis
+    time_24h = food_24h_df.index
+    # interest values - x axis
+    food1_24h = food_24h_df[food1]
+    food2_24h = food_24h_df[food2]
 
-    # create a new plot with a datetime axis type
-    p = figure(plot_width=800, plot_height=250, x_axis_type="datetime",
-                toolbar_location="above", tools=[hovertool],
-                responsive=True, outline_line_color="#666666")
-    p.yaxis.axis_label = "Interest"
-    p.xaxis.axis_label = "Time"
-    p.toolbar.logo = None
+    # get google trends data past week
+    pytrend.build_payload(kw_list=[food1, food2], timeframe='now 7-d', geo='US-TX-635')
+    food_7d_df = pytrend.interest_over_time()
 
-    # plot 2 data lines
-    p.line(tacos_bbq_df.index, tacos_bbq_df[food1], legend=list(tacos_bbq_df)[0],
-                color='blue', alpha=0.8, line_width=3)
-    p.line(tacos_bbq_df.index, tacos_bbq_df[food2], legend=list(tacos_bbq_df)[1],
-                color='red', alpha=0.8, line_width=3)
-
-    # make the javascript and html div
-    script, div = components(p)
-
-    return render_template("trends_chart.html", form=form, the_div=div, the_script=script,
-                            food1=food1, food2=food2)
+    # time - y axis
+    time_7d = food_7d_df.index
+    # interest values - x axis
+    food1_7d = food_7d_df[food1]
+    food2_7d = food_7d_df[food2]
+   
+    return render_template("trends_chart.html", form=form, food1=food1, food2=food2,
+                    time_24h=time_24h, food1_24h=food1_24h, food2_24h=food2_24h,
+                    time_7d=time_7d, food1_7d=food1_7d, food2_7d=food2_7d
+                    )
 
 
 if __name__ == "__main__":
