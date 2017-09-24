@@ -8,7 +8,7 @@ from wtforms.validators import InputRequired
 DEBUG = False # ensure DEBUG is False in production
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config['SECRET_KEY'] = '7d661f27d881f27567d441f2b6176a' # use something much harder in production
+app.config['SECRET_KEY'] = 'dev-key' # use something much harder in production
 
 # Login to Google. Only need to run this once, the rest of requests will use the same session.
 pytrend = TrendReq()
