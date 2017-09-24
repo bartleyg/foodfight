@@ -20,7 +20,9 @@
 <div class="container">
  
  <br>
-  <h1 class="text-center">Food Fight!</h2>
+  <h1 class="text-center">Food Fight!</h1>
+  <br>
+  <div class="text-center">Enter two foods or restaurants to track which Austinites prefer over time!</div>
   <br>
   <form action="" method="post">
     {{ form.csrf }}
@@ -53,7 +55,7 @@
             {% endif %}
  
             {% if "Error" in message[1]: %}
-                <div class="alert alert-warning">
+                <div class="alert alert-warning text-center">
                 {{ message[1] }}
                 </div>
             {% endif %}
@@ -61,14 +63,14 @@
             {% endif %}
         {% endwith %}
 
-    <h3 align="center">Interest in Austin past 24 Hours</h3>
+    <h3 class="text-center">Interest in Austin past 24 Hours</h3>
 <div>
 <!-- <div style="width:75%; margin: 0 auto;">-->
     <!-- bar chart canvas element -->
     <canvas id="chart"></canvas>
 </div>
 <br>
-    <h3 align="center">Interest in Austin past Week</h3>
+    <h3 class="text-center">Interest in Austin past Week</h3>
 <div>
 <!-- <div style="width:75%; margin: 0 auto;">-->
     <!-- bar chart canvas element -->

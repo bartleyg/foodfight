@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    
+    <title>Food Fight!</title>
+
+    <!-- Chart.js and moment needed for time axis of Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+  </head>
+<body>
+
+ 
+<div class="container">
+ 
+ <br>
+  <h1 class="text-center">Food Fight!</h1>
+  <br>
+  <div class="text-center">Enter two foods or restaurants to track which Austinites prefer over time!</div>
+  <br>
+  <form action="" method="post">
+    {{ form.csrf }}
+    <div class="row">
+      <div class="col">
+        <input type="text" class="form-control text-center" name="food1" placeholder="{{food1}}" value="{{food1}}">
+      </div>
+      <div class="col-1 text-center">
+        <h4>vs.</h4>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control text-center" name="food2" placeholder="{{food2}}" value="{{food2}}">
+      </div>
+    </div>
+    <br>
+    <div class="text-center">
+      <button type="submit" class="btn btn-success btn-lg">Fight</button>
+    </div>
+  </form>
+ 
+  <br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+ 
+        {% for message in messages %}
+            {% if "Error" not in message[1]: %}
+                <div class="alert alert-info text-center">
+                <strong>Success! </strong> {{ message[1] }}
+                </div>
+            {% endif %}
+ 
+            {% if "Error" in message[1]: %}
+                <div class="alert alert-warning text-center">
+                {{ message[1] }}
+                </div>
+            {% endif %}
+        {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+<br>
+
+</div><!--end class="container"-->
+
+</body>
+</html>
