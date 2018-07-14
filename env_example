@@ -1,0 +1,4 @@
+# Environment variables for flask production
+
+export SECRET_KEY=change-me-for-production
+export DEBUG=False

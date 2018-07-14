@@ -2,12 +2,18 @@ from pytrends.request import TrendReq
 from flask import Flask, render_template, flash, request
 from wtforms import Form, TextField, validators
 from wtforms.validators import InputRequired
+import os
 
-# App config
-DEBUG = False # ensure DEBUG is False in production
 app = Flask(__name__)
-app.config.from_object(__name__)
-app.config['SECRET_KEY'] = 'dev-key' # use something much harder in production
+# App config get DEBUG and SECRET_KEY environment variables from  $ source .env
+ENVIRONMENT_DEBUG = os.environ.get("DEBUG", default=False)
+if ENVIRONMENT_DEBUG.lower() in ("f", "false"):
+    ENVIRONMENT_DEBUG = False
+app.config['DEBUG'] = ENVIRONMENT_DEBUG # ensure DEBUG is False in production
+SECRET_KEY = os.environ.get("SECRET_KEY", default=None)
+if not SECRET_KEY:
+    raise ValueError("No secret key set for Flask application")
+app.config['SECRET_KEY'] = SECRET_KEY
 
 # Login to Google. Only need to run this once, the rest of requests will use the same session.
 pytrend = TrendReq()
