@@ -1,8 +1,7 @@
 from pytrends.request import TrendReq
 from flask import Flask, render_template, flash, request
-from wtforms import Form, TextField, validators, SubmitField
+from wtforms import Form, TextField, validators
 from wtforms.validators import InputRequired
-#import pandas as pd
 
 # App config
 DEBUG = False # ensure DEBUG is False in production
